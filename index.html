@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vision Nova RP</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #f97316;
+    --dark: #0d0d0d;
+    --dark2: #141414;
+    --dark3: #1a1a1a;
+    --light: #e8e0d4;
+    --muted: rgba(232,224,212,0.45);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--dark); color: var(--light); font-family: 'Barlow', sans-serif; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.4rem 5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.93);
+    border-bottom: 1px solid rgba(249,115,22,0.18);
+    backdrop-filter: blur(8px);
+  }
+  .nav-logo { font-family: 'Bebas Neue'; font-size: 1.6rem; letter-spacing: 0.1em; color: var(--light); text-decoration: none; }
+  .nav-logo span { color: var(--orange); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { font-family: 'Barlow Condensed'; font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; color: rgba(232,224,212,0.5); text-decoration: none; transition: color .25s; }
+  .nav-links a:hover { color: var(--orange); }
+  .nav-btn { font-family: 'Barlow Condensed'; font-size: 0.8rem; letter-spacing: 0.15em; font-weight: 700; text-transform: uppercase; padding: .6rem 1.8rem; background: var(--orange); color: #fff; text-decoration: none; transition: background .25s, transform .2s; }
+  .nav-btn:hover { background: #ea6b0a; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero { position: relative; min-height: 100vh; display: flex; align-items: flex-end; padding: 0 5rem 7rem; overflow: hidden; }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to top, rgba(13,13,13,1) 0%, rgba(13,13,13,0.55) 45%, rgba(13,13,13,0.15) 100%),
+      linear-gradient(to right, rgba(13,13,13,0.85) 0%, transparent 65%),
+      url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1600&q=80&fit=crop') center/cover no-repeat;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 700px; }
+  .hero-tag { display: inline-flex; align-items: center; gap: .6rem; font-family: 'Barlow Condensed'; font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--orange); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp .7s .1s forwards; }
+  .hero-tag::before { content: ''; width: 28px; height: 1px; background: var(--orange); }
+  .hero-title { font-family: 'Bebas Neue'; font-size: clamp(4rem, 11vw, 9rem); line-height: .9; letter-spacing: .03em; color: #fff; opacity: 0; animation: fadeUp .7s .25s forwards; }
+  .hero-title .acc { color: var(--orange); }
+  .hero-sub { font-size: 1.1rem; color: var(--muted); font-weight: 300; line-height: 1.8; max-width: 460px; margin-top: 1.5rem; opacity: 0; animation: fadeUp .7s .4s forwards; }
+  .hero-actions { display: flex; align-items: center; gap: 1.2rem; margin-top: 2.5rem; opacity: 0; animation: fadeUp .7s .55s forwards; }
+  .btn-main { font-family: 'Barlow Condensed'; font-size: .9rem; letter-spacing: .18em; font-weight: 700; text-transform: uppercase; padding: 1rem 2.6rem; background: var(--orange); color: #fff; text-decoration: none; display: inline-block; transition: all .3s; }
+  .btn-main:hover { background: #ea6b0a; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(249,115,22,.35); }
+  .btn-ghost { font-family: 'Barlow Condensed'; font-size: .9rem; letter-spacing: .18em; font-weight: 700; text-transform: uppercase; padding: 1rem 2.6rem; border: 1px solid rgba(232,224,212,.3); color: var(--light); text-decoration: none; display: inline-block; transition: all .3s; }
+  .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+  .hero-stats { position: absolute; bottom: 7rem; right: 5rem; display: flex; flex-direction: column; gap: 2rem; z-index: 1; opacity: 0; animation: fadeUp .7s .7s forwards; }
+  .stat { text-align: right; border-right: 2px solid var(--orange); padding-right: 1.2rem; }
+  .stat-num { font-family: 'Bebas Neue'; font-size: 2.6rem; line-height: 1; color: #fff; display: block; letter-spacing: .05em; }
+  .stat-lbl { font-family: 'Barlow Condensed'; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+  .divider { height: 1px; background: linear-gradient(to right, transparent, rgba(249,115,22,.25), transparent); }
+
+  /* SECTION HELPERS */
+  .s-label { font-family: 'Barlow Condensed'; font-size: .7rem; letter-spacing: .3em; text-transform: uppercase; color: var(--orange); font-weight: 600; display: flex; align-items: center; gap: .8rem; margin-bottom: 1rem; }
+  .s-label::before { content: ''; width: 20px; height: 1px; background: var(--orange); }
+  .s-title { font-family: 'Bebas Neue'; font-size: clamp(2.4rem, 5vw, 3.8rem); letter-spacing: .04em; color: #fff; line-height: 1; }
+
+  /* FEATURES */
+  .features { padding: 7rem 5rem; max-width: 1400px; margin: 0 auto; }
+  .feat-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
+  .feat-desc { max-width: 320px; font-size: 1rem; color: var(--muted); font-weight: 300; line-height: 1.8; text-align: right; }
+  .feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(255,255,255,.06); }
+  .feat-card { background: var(--dark2); padding: 2.5rem 2rem; transition: background .3s; position: relative; overflow: hidden; }
+  .feat-card:hover { background: var(--dark3); }
+  .feat-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.4rem; }
+  .feat-ico { font-size: 1.8rem; line-height: 1; }
+  .feat-n { font-family: 'Bebas Neue'; font-size: 1.1rem; color: rgba(255,255,255,.1); letter-spacing: .1em; }
+  .feat-name { font-family: 'Barlow Condensed'; font-size: 1.05rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #fff; margin-bottom: .6rem; }
+  .feat-txt { font-size: .9rem; color: var(--muted); line-height: 1.75; font-weight: 300; }
+  .feat-bar { position: absolute; bottom: 0; left: 0; height: 2px; width: 0; background: var(--orange); transition: width .4s ease; }
+  .feat-card:hover .feat-bar { width: 100%; }
+
+  /* ABOUT */
+  .about { background: var(--dark2); padding: 7rem 5rem; }
+  .about-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.2fr; gap: 6rem; align-items: center; }
+  .about-img-wrap { position: relative; }
+  .about-img-face {
+    width: 100%; aspect-ratio: 4/5;
+    background: url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80&fit=crop') center/cover;
+    filter: brightness(.55) saturate(.6);
+  }
+  .about-deco { position: absolute; bottom: -1.5rem; right: -1.5rem; width: 55%; height: 55%; border: 2px solid var(--orange); z-index: -1; }
+  .about-text p { font-size: 1.05rem; color: var(--muted); line-height: 1.9; font-weight: 300; margin-top: 1.8rem; }
+  .about-list { margin-top: 2.5rem; display: flex; flex-direction: column; gap: .9rem; }
+  .about-li { display: flex; align-items: center; gap: 1rem; font-family: 'Barlow Condensed'; font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; color: rgba(232,224,212,.7); }
+  .about-li::before { content: ''; width: 6px; height: 6px; background: var(--orange); flex-shrink: 0; }
+  .about-cta { margin-top: 2.5rem; }
+
+  /* ROLES */
+  .roles { padding: 7rem 5rem; max-width: 1400px; margin: 0 auto; }
+  .roles-header { margin-bottom: 3.5rem; }
+  .roles-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.2rem; }
+  .role-card { background: var(--dark2); border: 1px solid rgba(255,255,255,.06); padding: 2rem 1.5rem; transition: all .3s; cursor: default; }
+  .role-card:hover { border-color: var(--orange); background: var(--dark3); transform: translateY(-4px); }
+  .role-ico { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
+  .role-name { font-family: 'Barlow Condensed'; font-size: 1rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #fff; margin-bottom: .5rem; }
+  .role-desc { font-size: .88rem; color: var(--muted); line-height: 1.65; font-weight: 300; }
+
+  /* RULES */
+  .rules { background: var(--dark2); padding: 7rem 5rem; }
+  .rules-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 2fr; gap: 6rem; align-items: start; }
+  .rules-left { position: sticky; top: 8rem; }
+  .rules-left p { font-size: 1rem; color: var(--muted); line-height: 1.8; font-weight: 300; margin-top: 1.5rem; }
+  .rule-row { display: grid; grid-template-columns: 60px 1fr; gap: 1.5rem; padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,.06); transition: all .25s; }
+  .rule-row:first-child { border-top: 1px solid rgba(255,255,255,.06); }
+  .rule-row:hover { padding-left: .5rem; }
+  .rule-row:hover .rule-n { color: var(--orange); }
+  .rule-n { font-family: 'Bebas Neue'; font-size: 1.6rem; color: rgba(255,255,255,.15); line-height: 1; transition: color .25s; padding-top: .2rem; }
+  .rule-body h4 { font-family: 'Barlow Condensed'; font-size: 1rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #fff; margin-bottom: .4rem; }
+  .rule-body p { font-size: .92rem; color: var(--muted); line-height: 1.75; font-weight: 300; }
+
+  /* CTA */
+  .cta { position: relative; padding: 9rem 5rem; overflow: hidden; text-align: center; }
+  .cta-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1600&q=80&fit=crop') center/cover; filter: brightness(.22) saturate(.5); }
+  .cta-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--dark) 0%, rgba(13,13,13,.45) 50%, var(--dark) 100%); }
+  .cta-content { position: relative; z-index: 1; }
+  .cta-title { font-family: 'Bebas Neue'; font-size: clamp(3rem, 7vw, 6rem); letter-spacing: .05em; color: #fff; line-height: .95; margin: 1rem 0; }
+  .cta-title span { color: var(--orange); }
+  .cta-sub { font-size: 1.05rem; color: var(--muted); max-width: 460px; margin: 1.5rem auto 3rem; font-weight: 300; line-height: 1.8; }
+  .cta-label { justify-content: center; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid rgba(255,255,255,.07); padding: 2.5rem 5rem; display: flex; align-items: center; justify-content: space-between; background: var(--dark); }
+  .f-logo { font-family: 'Bebas Neue'; font-size: 1.3rem; letter-spacing: .1em; color: rgba(232,224,212,.45); }
+  .f-logo span { color: var(--orange); }
+  .f-links { display: flex; gap: 2rem; list-style: none; }
+  .f-links a { font-family: 'Barlow Condensed'; font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: rgba(232,224,212,.28); text-decoration: none; transition: color .2s; }
+  .f-links a:hover { color: var(--orange); }
+  .f-copy { font-family: 'Barlow Condensed'; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(232,224,212,.2); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(28px); transition: all .65s cubic-bezier(.16,1,.3,1); }
+  .reveal.up { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">VISION <span>NOVA</span> RP</a>
+  <ul class="nav-links">
+    <li><a href="#features">Fonctionnalités</a></li>
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#roles">Métiers</a></li>
+    <li><a href="#rules">Règles</a></li>
+  </ul>
+  <a href="#" class="nav-btn">Rejoindre</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Serveur FiveM Roleplay</div>
+    <h1 class="hero-title">VISION<br><span class="acc">NOVA</span><br>RP</h1>
+    <p class="hero-sub">Une ville vivante, une histoire à écrire. Rejoignez des centaines de joueurs dans l'expérience roleplay la plus immersive du moment.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-main">Rejoindre maintenant</a>
+      <a href="#about" class="btn-ghost">En savoir plus</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">500+</span><span class="stat-lbl">Joueurs actifs</span></div>
+    <div class="stat"><span class="stat-num">24/7</span><span class="stat-lbl">En ligne</span></div>
+    <div class="stat"><span class="stat-num">50+</span><span class="stat-lbl">Métiers</span></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="features">
+    <div class="feat-header reveal">
+      <div>
+        <div class="s-label">Ce qui nous différencie</div>
+        <h2 class="s-title">FONCTIONNALITÉS<br>EXCLUSIVES</h2>
+      </div>
+      <p class="feat-desc">Des systèmes développés sur mesure pour l'expérience roleplay la plus complète du moment.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card reveal"><div class="feat-top"><span class="feat-ico">💰</span><span class="feat-n">01</span></div><div class="feat-name">Économie Dynamique</div><p class="feat-txt">Prix fluctuants, marchés boursiers, immobilier. Une économie aussi réelle que possible.</p><div class="feat-bar"></div></div>
+      <div class="feat-card reveal"><div class="feat-top"><span class="feat-ico">🏙️</span><span class="feat-n">02</span></div><div class="feat-name">Ville Vivante</div><p class="feat-txt">Quartiers distincts, commerces, zones de tension. Chaque rue a sa propre histoire.</p><div class="feat-bar"></div></div>
+      <div class="feat-card reveal"><div class="feat-top"><span class="feat-ico">⚖️</span><span class="feat-n">03</span></div><div class="feat-name">Justice Jouable</div><p class="feat-txt">Avocats, juges, procureurs. Un vrai système judiciaire incarné par des joueurs.</p><div class="feat-bar"></div></div>
+      <div class="feat-card reveal"><div class="feat-top"><span class="feat-ico">🏥</span><span class="feat-n">04</span></div><div class="feat-name">Médecine Avancée</div><p class="feat-txt">Diagnostics, chirurgies, pathologies réalistes. Chaque blessure suit un protocole.</p><div class="feat-bar"></div></div>
+      <div class="feat-card reveal"><div class="feat-top"><span class="feat-ico">📡</span><span class="feat-n">05</span></div><div class="feat-name">Communications Radio</div><p class="feat-txt">Système radio et téléphonique immersif. Chaque métier a ses fréquences dédiées.</p><div class="feat-bar"></div></div>
+      <div class="feat-card reveal"><div class="feat-top"><span class="feat-ico">⚡</span><span class="feat-n">06</span></div><div class="feat-name">Serveur Optimisé</div><p class="feat-txt">Infrastructure haute performance. Moins de 20ms de ping garanti, zéro lag.</p><div class="feat-bar"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about">
+  <div class="about-inner">
+    <div class="about-img-wrap reveal">
+      <div class="about-img-face"></div>
+      <div class="about-deco"></div>
+    </div>
+    <div class="about-text reveal">
+      <div class="s-label">Notre serveur</div>
+      <h2 class="s-title">UNE VILLE,<br>VOTRE HISTOIRE</h2>
+      <p>Vision Nova RP est un serveur FiveM de roleplay sérieux, construit par et pour sa communauté. Chaque personnage a une profondeur, chaque organisation a ses codes, et chaque action a des conséquences.</p>
+      <p>Que vous visiez le badge ou la vie dans l'ombre — votre destin vous appartient entièrement.</p>
+      <div class="about-list">
+        <div class="about-li">Serveur FiveM whitelist</div>
+        <div class="about-li">Scripts développés sur mesure</div>
+        <div class="about-li">Staff actif et à l'écoute</div>
+        <div class="about-li">Communauté francophone (FR / BE / CH)</div>
+        <div class="about-li">Contenu adulte — 18 ans et plus</div>
+      </div>
+      <div class="about-cta"><a href="#" class="btn-main">Faire ma demande</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section id="roles">
+  <div class="roles">
+    <div class="roles-header reveal">
+      <div class="s-label">Choisissez votre voie</div>
+      <h2 class="s-title">LES MÉTIERS<br>DISPONIBLES</h2>
+    </div>
+    <div class="roles-grid">
+      <div class="role-card reveal"><span class="role-ico">👮</span><div class="role-name">LSPD</div><p class="role-desc">Police de Los Santos. Faites respecter la loi, protégez les civils.</p></div>
+      <div class="role-card reveal"><span class="role-ico">🏥</span><div class="role-name">EMS</div><p class="role-desc">Urgences médicales. Chaque minute compte sur le terrain.</p></div>
+      <div class="role-card reveal"><span class="role-ico">🔥</span><div class="role-name">Pompiers</div><p class="role-desc">Incendies, accidents, sauvetages. Les héros du quotidien.</p></div>
+      <div class="role-card reveal"><span class="role-ico">⚖️</span><div class="role-name">Justice</div><p class="role-desc">Avocats et magistrats au cœur du système judiciaire.</p></div>
+      <div class="role-card reveal"><span class="role-ico">💼</span><div class="role-name">Entrepreneur</div><p class="role-desc">Ouvrez votre business, embauchez, développez votre empire légal.</p></div>
+      <div class="role-card reveal"><span class="role-ico">📰</span><div class="role-name">Journaliste</div><p class="role-desc">Couvrez les événements, informez, enquêtez.</p></div>
+      <div class="role-card reveal"><span class="role-ico">🌑</span><div class="role-name">Organisation</div><p class="role-desc">Rejoignez ou créez un gang. Territoires, trafics, hiérarchie.</p></div>
+      <div class="role-card reveal"><span class="role-ico">🔧</span><div class="role-name">Mécano</div><p class="role-desc">Votre garage, vos règles. Réparation et customisation.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- RULES -->
+<section id="rules" class="rules">
+  <div class="rules-inner">
+    <div class="rules-left reveal">
+      <div class="s-label">Code de conduite</div>
+      <h2 class="s-title">LES<br>RÈGLES</h2>
+      <p>Le respect de ces règles garantit une expérience de qualité pour toute la communauté. Toute infraction entraîne des sanctions immédiates.</p>
+    </div>
+    <div>
+      <div class="rule-row reveal"><div class="rule-n">01</div><div class="rule-body"><h4>Respect absolu</h4><p>Le respect envers chaque joueur et membre du staff est non négociable, en jeu comme sur les canaux communautaires.</p></div></div>
+      <div class="rule-row reveal"><div class="rule-n">02</div><div class="rule-body"><h4>Roleplay cohérent</h4><p>Restez dans votre personnage en permanence. Le "out of character" intempestif nuit à l'immersion collective.</p></div></div>
+      <div class="rule-row reveal"><div class="rule-n">03</div><div class="rule-body"><h4>Pas de metagaming</h4><p>Utiliser des informations hors-jeu pour avantager votre personnage est strictement interdit et sévèrement sanctionné.</p></div></div>
+      <div class="rule-row reveal"><div class="rule-n">04</div><div class="rule-body"><h4>Valeur de vie</h4><p>Votre personnage tient à sa vie. Toute action irréaliste mettant votre vie en danger sans logique narrative est bannable.</p></div></div>
+      <div class="rule-row reveal"><div class="rule-n">05</div><div class="rule-body"><h4>Décisions du staff finales</h4><p>Les décisions de modération sont définitives. Les réclamations se font exclusivement via tickets officiels.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-content">
+    <div class="s-label cta-label reveal">Prêt à écrire votre histoire ?</div>
+    <h2 class="cta-title reveal">REJOIGNEZ<br><span>VISION NOVA RP</span></h2>
+    <p class="cta-sub reveal">Des centaines de joueurs vous attendent. Créez votre personnage, forgez votre destin dans une ville qui ne dort jamais.</p>
+    <a href="#" class="btn-main reveal">Faire ma demande — Gratuit</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">VISION <span>NOVA</span> RP</div>
+  <ul class="f-links">
+    <li><a href="#">Discord</a></li>
+    <li><a href="#">Règlement</a></li>
+    <li><a href="#">Candidature</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="f-copy">© 2025 Vision Nova RP</div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('up'); });
+  }, { threshold: 0.12 });
+  els.forEach((el, i) => {
+    const siblings = [...el.parentElement.querySelectorAll('.reveal')];
+    el.style.transitionDelay = `${siblings.indexOf(el) * 0.07}s`;
+    io.observe(el);
+  });
+</script>
+</body>
+</html>
